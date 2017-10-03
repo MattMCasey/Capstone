@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Board Game Recommender</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- Global Site Tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-41814957-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)};
+    gtag('js', new Date());
+
+    gtag('config', 'UA-41814957-1');
+      </script>
+</head>
+    <body>
+      <div class="container">
+	<h1>Top 100 for {{user_id}}</h1>
+	<br>
+	<button type="button" onclick="history.go(-1)"  class="btn btn-success">Back to Five</button>
+	<a href="/"   class="btn btn-success">Change Username</a>
+	<p></p>
+	<br>
+
+      {% if user_id == 'none' %}
+      <p>We don't have records for that username. That could be because:</p>
+        <ol>
+          <li>The name was entered incorrectly</li>
+          <li>That person doesn't have a BGG account</li>
+          <li>That person hasn't rated enough games in our database</li>
+        </ol>
+      </p>So, here are some games that most people agree are great.</p>
+      {% endif %}
+
+
+<table class="table table-striped">
+  
+        {% for game in pred %}
+        <tr>
+
+
+          <td><div align="right"><i>{{game[3]}}.  </i></div></td>
+          <td><b> {{game[0]}}</b></td>
+          <td>  |  </td>
+          <td><a href="{{game[1]}}">BGG</a></td>
+          <td>  |  </td>
+          <td> <a href="{{game[2]}}">Amazon</a></td>
+        </tr>
+        {% endfor %}
+        </table>
+
+
+      <table>
+
+
+
+    </table>
+
+      <button type="button" onclick="history.go(-1)"  class="btn btn-success">Back to Five</button>
+      <a href="/"   class="btn btn-success">Change Username</a>
+      </div>
+    </body>
+</html>

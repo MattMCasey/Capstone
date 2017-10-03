@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <script>
+    function myFunction() {
+    location.reload();
+    }
+    </script>
+<head>
+  <title>Board Game Recommender</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+    <body>
+      <div class="container">
+	{% if profile == True  %}
+	<h1>Recommendations for {{user_id}}</h1>
+	{% endif %}
+
+	{% if profile == False  %}
+	<h1>Recommendations</h1>
+      <p>We don't have records for that username. That could be because:</p>
+        <ol>
+          <li>The name was entered incorrectly</li>
+          <li>That person doesn't have a BGG account</li>
+          <li>That person hasn't rated enough games in our database</li>
+        </ol>
+      <p>If you would like to see more personalized suggestions, go rate your favorite games on
+	<a href = "http://www.boardgamegeek.com">Board Game Geek</a>. Then, fill out the form below.</p>
+      <form action="/update" method="GET" class="multi-field" >
+	<fieldset>
+	  <div class="field-wrapper error">
+	    <input id="user_id" name="user_id" type="text" placeholder="BGG Username*" class="required error">
+	                    <input id="email" name="email" type="text" placeholder="Email Address*" style="width:260px;" class="required error">
+	 <button type="submit" class="btn btn-success">Submit</button>
+	 
+			    
+	</fieldset>
+      </form>
+      
+      <br>
+      <P>We will email you when the recommendation engine has been updated with your ratings.</P>
+      <P><b>In the mean time,</b> here are some games that a lot of people agree are great.</P>
+      {% endif  %}
+      </div>
+
+<div class="container">
+<table class="table table-striped">
+  <tbody>
+    <tr>
+      <td>
+	   <button type="button" onclick="history.go(0)"  class="btn btn-success">See Five More</button>   
+	   <a href="/"   class="btn btn-success">Change Username</a>
+      </td>
+    </tr>
+    {% for game in pred %}
+    <tr>
+      <td><img src={{game[3]}} alt={{game[0]}} style="max-height: 150px;"  </td>
+    </tr>
+    <tr>
+        <td><b>{{game[0]}} | <a href="{{game[1]}}" target="_blank">More Info</a> | <a href="{{game[2]}}" target="_blank">Buy on Amazon</a></b></td>
+    </tr>
+      {% endfor  %}
+    </table>
+</div>
+
+<div class="container">
+    <table>
+      <tr>
+
+        <td>
+      <form>
+          <input type="button" onclick="history.go(0)"class="btn btn-success" value="See Five More">
+
+      </form>
+	</td>
+      <tr>
+	<td>
+	  <h3>What does this button do?</h3>
+	</td>
+	</tr>
+      <tr>
+	<td>
+	  <p></p>
+	  <p>When you 'See Five More', we curate a semi-random selection from the entered user's top 100.</p>
+	  <p>The engine predicts how the user would rate each of the games in the database (more than 2000). We then order those ratings and assign each of them to one of the five slots above.</p>
+
+	  {% if profile == True  %}
+	  <p>We based your recommendations on how your rated the following games: </p>
+	  <ul>
+	    {% for rating in rated %}
+	    <li><b>{{rating}}</b></li>
+	    {% endfor %}
+	    </ul>
+	  {% endif  %}
+	  
+	  <p>You can see suggestions for other users by entering their username on the front page.</p>	   <p>You can also see the full list by clicking the 'See Top 100' button below.</p>
+	</td>
+      </tr>
+            <tr>
+	
+    <td>
+           <form action="/top100?user_id=''' + session['user_id'] + '''" method='GET'>
+          <input type="submit"class="btn btn-success" value="See top 100 for {{user_id}}"/>
+          </form>
+    </td>
+    </tr>
+  <tr><td><p></p></td></tr>
+    <tr>
+    <td>
+	  <form action="/">
+	    <input type="submit" class="btn btn-success" value="Change Username"/>
+	  </form>
+    </td>
+
+    </tr>
+
+      <tr>
+	<td><h3>Were these suggestions useful?</h3></td>
+      </tr>
+      <tr>
+	<td class="col-sm-1">
+	      <a href="/feedback?yn=y"  type="submit"class="btn btn-success"> Yes </a>
+	      <a href="/feedback?yn=n"  type="submit"class="btn btn-success">  No </a>
+	</td>
+	
+      </tr>
+      <tr>
+	<td>
+	  <p></p>
+	  <p>Please tell us. We'd like to know!</p>
+	</td>
+      </tr>
+      
+
+    
+      {% if profile == True %}
+
+      <tr>
+	<td><h3>Want better recommendations?</h3></td>
+      </tr>
+      <tr>
+	<td>
+	  <p>Our recommendations can only be as good as your ratings on Board Game Geek.</p>
+	  <p>If you want better recommendations, you can go rate more board games, or check your ratings to see if they still reflect your views on a game.</p>
+	  <p>Then, fill out the form below. We'll update your ratings in our database and let you know when our model has been updated to take them into account</p>
+	</td>
+      </tr>
+      <tr>
+	<td>
+	  <form action="/update" method="GET" class="multi-field" >
+	    <fieldset>
+	      <div class="field-wrapper error">
+		<input id="email" name="email" type="text" placeholder="Email Address*" style="width:260px;" class="required error">
+		<button type="submit" class="btn btn-success">Submit</button>
+	    </fieldset>
+	  </form>
+	  <br>
+	  <br>
+	  <br>
+	  </td>
+	</tr>
+	
+
+      {% endif %}
+
+
+    </div>
+    </body>
+</html>

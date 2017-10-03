@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Board Game Recommender</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+  <body>
+  <div class="container">
+    <p>Welcome to the Clever Move Games board game recommender.</p>
+    <p>Powered by data from <a href="https://boardgamegeek.com">BoardGameGeek.com.</a></p>
+  <form action="/recs" method='GET'>
+    <input type="text" name="user_id" style="width:260px;" placeholder="Enter your BoardGameGeek Username">
+    <input type="submit" class="btn btn-success" value="Submit">
+    <input type="submit" class="btn btn-success" value="Enter Without Username">
+  </form>
+  <p></p>
+  <p>(Currently doesn't work on Safari. Loading the next page will take a few seconds.)</p>
+  </div>
+  <hr width="1%">
+  <hr width="85%">
+  <hr width="85%">
+  <div class="container">
+    <h3>What's going on here?</h3>
+    <p>This is a project that uses collaborative filtering to find the best board games for you to try based on how you -- and other people <i>like</i> you -- have rated thousands of games on BoardGameGeek.com. </p>
+    <p>I created this recommender as my capstone project for a Data Science training program at <a href ="https://www.galvanize.com">Galvanize</a></p>
+    <p>I'm rolling out the recommender for a short beta test ahead of my final presentation. I pledge all proceeds raised during this beta period to <a href ="https://extra-life.org">Extra Life</a>, a game-focussed charity that raises money for Children's Miracle Network Hospitals.</p>
+    <p>If you like what I'm doing here (or if you think there's something I could do better) please let me know. You can find a feedback form on the recommendations page.</p>
+    </div>
+  </body>
+</html>
