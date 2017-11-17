@@ -55,7 +55,7 @@
   <tbody>
     <tr>
       <td>
-	   <button type="button" onclick="history.go(0)"  class="btn btn-success">See Five More</button>   
+	  <!-- <button type="button" onclick="history.go(0)"  class="btn btn-success">See Five More</button>  -->  
 	   <a href="/"   class="btn btn-success">Change Username</a>
       </td>
     </tr>
@@ -75,7 +75,7 @@
       <tr>
 
         <td>
-      <form>
+   <!--   <form>
           <input type="button" onclick="history.go(0)"class="btn btn-success" value="See Five More">
 
       </form>
@@ -89,7 +89,7 @@
 	<td>
 	  <p></p>
 	  <p>When you 'See Five More', we curate a semi-random selection from the entered user's top 100.</p>
-	  <p>The engine predicts how the user would rate each of the games in the database (more than 2000). We then order those ratings and assign each of them to one of the five slots above.</p>
+	  <p>The engine predicts how the user would rate each of the games in the database (more than 2000). We then order those ratings and assign each of them to one of the five slots above.</p> -->
 
 	  {% if profile == True  %}
 	  <p>We based your recommendations on how your rated the following games: </p>
@@ -121,22 +121,7 @@
 
     </tr>
 
-      <tr>
-	<td><h3>Were these suggestions useful?</h3></td>
-      </tr>
-      <tr>
-	<td class="col-sm-1">
-	      <a href="/feedback?yn=y"  type="submit"class="btn btn-success"> Yes </a>
-	      <a href="/feedback?yn=n"  type="submit"class="btn btn-success">  No </a>
-	</td>
-	
-      </tr>
-      <tr>
-	<td>
-	  <p></p>
-	  <p>Please tell us. We'd like to know!</p>
-	</td>
-      </tr>
+
       
 
     

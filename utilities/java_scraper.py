@@ -39,7 +39,7 @@ def update_game(game_id):
         print(i)
         i += 1
         go = scrape_page(url, game_id, last)
-        time.sleep(120)
+        time.sleep(30)
 
     lastupdate.update_one({'game_id':game_id}, {'$set':{'last_update':time.ctime()}})
 
@@ -64,7 +64,7 @@ def scrape_page(url, game_id, last):
         ratings.insert_one({
             'user_id' : user_ids[i],
             'game_id' : game_id,
-            'rating' : ratings[i+2]
+            'rating' : float(ratings[i+2])
             })
 
     if datetime.strptime(crnt[-1], '%b %d, %Y') < last:
@@ -93,4 +93,3 @@ if __name__ == '__main__':
     print 'program started'
     while 1 == 1:
         end_to_end()
-        clean_duplicates()

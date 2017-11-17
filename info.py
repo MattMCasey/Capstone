@@ -9,7 +9,7 @@ db = client['bgg']
 fback = db['feedback']
 contacts = db['contacts']
 ratings = db['game_ratings']
-
+users = db['users']
 
 def feedback_base(helpful, user_id, profile, ts):
     fback.insert_one({'time': ts, 'user_id': user_id,
@@ -37,7 +37,17 @@ def email_update(email):
     data={"from": "CleverMoveGames.com <mailgun@mail.clevermovegames.com>",
     "to": email,
     "subject": "Your updated game suggestions",
-    "text": "Hey there! \n \nPer your request, we have updated our board game  recommendation engine with new results based on your recent Board Game Geek ratings.\n \nGo to www.CleverMoveGames.com/board-game-recommender to see them."})
+    "text": "Hey there! \n\nPer your request, we have updated our board game recommendation engine with new results based on your recent Board Game Geek ratings.\n \nGo to www.CleverMoveGames.com/board-game-recommender to see them."})
+
+def email_blast(email, headline, body):
+    print 'email_blast ' + email
+    return requests.post(
+        "https://api.mailgun.net/v3/mail.clevermovegames.com/messages",
+         auth=("api", "key-6951602764b3f8b2d19413a24b55e510"),
+         data={"from": "CleverMoveGames.com <mailgun@mail.clevermovegames.com>",
+               "to": email,
+               "subject": headline,
+               "text":body})
 
 def page_grabber(url):
      get = requests.get(url)
@@ -59,6 +69,20 @@ def update_user(page, user_id):
                            upsert=True
                             )
 
+def create_filter(page, user_id):
+
+    owned = page.find_all('item')
+    fltr = []
+    for thing in owned:
+        fltr.append(thing.attrs['objectid'])
+
+    users.update_one({'user_id':user_id},
+                     {'$set':
+                      {'filter':fltr}},
+                     upsert=True
+                     )
+        
+
 def user_poke(user_id):
     url = 'http://boardgamegeek.com/xmlapi2/collection?username='+user_id+'&stats=1&rated=1'
     page = page_grabber(url)
@@ -67,8 +91,17 @@ def user_poke(user_id):
         time.sleep(5)
         page = page_grabber(url)
 
-
     update_user(page, user_id)
+
+    url = 'http://boardgamegeek.com/xmlapi2/collection?username='+user_id+'&own=1&rated=0'
+    page = page_grabber(url)
+
+    while 'Your request for this collection has been accepted' in str(page):
+        time.sleep(5)
+        page = page_grabber(url)
+
+    create_filter(page, user_id)
+    time.sleep(5)
 
 def feedback(user_id, helpful, comment=None):
     if comment==None:

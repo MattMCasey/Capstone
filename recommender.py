@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import graphlab as gl
 from pymongo import MongoClient
+import pymongo
 import time
 import requests
 from pprint import pprint
@@ -31,12 +32,12 @@ class Recommender(object):
         
     def build_set(self):
         game_set = []
-        for row in self.meta.find({'lastpub':{'$gt':2010}}):
+        for row in self.meta.find({'lastpub':{'$gt':2010}, 'special':'n'}):
             game_set.append(row['game_id'])
         return game_set
 
     def get_rated(self, user_id):
-        game_ids=[z['game_id'] for z in self.ratings.find({"user_id": user_id})]
+        game_ids=[z['game_id'] for z in self.ratings.find({"user_id": user_id}).sort([("rating", pymongo.DESCENDING)]).limit(10)]
         #rated = set(self.users.find_one({'user_id':user_id})['filter'])
         profile = True
         rated=[]
@@ -90,14 +91,14 @@ keywords="
         return top_100_names, top_100_bgg, top_100_amazon, top_100_images
 
 
-    def five_recs(self, user_id):
-        g1 = np.random.randint(0,5)
-        g2 = np.random.randint(5,15)
-        g3 = np.random.randint(15,35)
-        g4 = np.random.randint(35,60)
-        g5 = np.random.randint(60,100)
+    def five_recs(self, user_id, start=0):
+        #g1 = 1 #np.random.randint(0,5)
+        #g2 = 2 #np.random.randint(5,15)
+        #g3 = 3 #np.random.randint(15,35)
+        #g4 = 4 #np.random.randint(35,60)
+        #g5 = 5 #np.random.randint(60,100)
 
-        gs = [g1, g2, g3, g4, g5]
+        gs = [x for x in range(start, start+5)]
 
         recs, bgg, amazon, img_path = self.get_top_100(user_id)
 
@@ -124,12 +125,13 @@ keywords="
         return preds
 
 
-def build_model(num=20):
+def build_model(num=11):
     print 'pulling records and building dataframe'
     df = pd.DataFrame(list(g_ratings.find()))
     df2 = df[['user_id', 'game_id', 'rating']]
     print 'cleaning dataframe'
     df2['rating'] = df2['rating'].convert_objects(convert_numeric=True)
+    #sf = gl.SFrame.read_json('../mongo_exports/ratings.json', orient='records')
     sf = gl.SFrame(df2[['user_id', 'game_id', 'rating']])
     rec = gl.recommender.factorization_recommender.create(
             sf,

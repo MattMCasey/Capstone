@@ -87,7 +87,7 @@ def get_ratings(page, game_id):
     for i in range(1, top):
         #print(i)
         chopped = raw[i].split('"')
-        rating = chopped[0]
+        rating = float(chopped[0])
         user_id = chopped[2]
         comment = chopped[4]
 
